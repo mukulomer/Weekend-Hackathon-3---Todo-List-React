@@ -1,97 +1,81 @@
-import React, { useState } from "react";
+import React from "react";
 import "./../styles/App.css";
-import Task from "./Task";
-import Edittask from "./Edittask";
-
+import { useState } from "react";
 function App() {
-  const tasks = [
-    {
-      name: "buy milk"
-    }
-  ];
-
-  const [value, setValue] = useState("");
-  const [task, setTask] = useState(tasks);
-  const [open, setOpen] = useState(false);
-  const [value1, setValue1] = useState("");
-  const [editId, setEditId] = useState(0);
-
-  const handleCLick = () => {
-    let taskcopy = [...task];
-    if (value === "") {
-      return;
-    } else {
-      let obj = {
-        name: value
-      };
-      taskcopy.push(obj);
-      setTask(taskcopy);
-      setValue("");
-    }
+  const [items, setItems] = useState("");
+  const [todoList, setTodoList] = useState([]);
+  const [todoId, setTodoId] = useState(0);
+  const [showEditBox, setShowEditBox] = useState(false);
+  const [editId, setEditId] = useState(1);
+  const [editBoxText, setEditBoxText] = useState("");
+  const handleChange = (event) => {
+    setItems(event.target.value);
+  };
+  const handleAdd = () => {
+    let todoListCopy = [...todoList];
+    todoListCopy.push({ id: todoId, text: items });
+    setTodoId(todoId + 1);
+    setTodoList(todoListCopy);
+    setItems("");
+  };
+  const handleEdit = (id) => {
+    setShowEditBox(!showEditBox);
+    setEditId(id);
+  };
+  const handleDelete = (id) => {
+    let newTodoList = todoList.filter((task) => task !== todoList[id]);
+    setTodoList(newTodoList);
+  };
+  const handleEditBox = (event) => {
+    let text = event.target.value;
+    setEditBoxText(text);
   };
 
-  const handleDelete = (index) => {
-    const taskCopy = [...task];
-    taskCopy.splice(index, 1);
-    setTask(taskCopy);
-  };
-
-  const handleEdit = (index) => {
-    setOpen(true);
-    setEditId(index);
-  };
-
-  const SaveEdit = () => {
-    let taskCopy = [...task];
-
-    if (value1 !== "") {
-      taskCopy[editId].name = value1;
-    }
-    setTask(taskCopy);
-    setOpen(false);
-    setValue1("");
-    console.log(taskCopy);
+  const saveEdit = () => {
+    const tempList = [...todoList];
+    tempList.forEach((task) => {
+      if (task.id === editId) {
+        task.text = editBoxText;
+      }
+    });
+    setTodoList(tempList);
+    setShowEditBox(false);
+    setEditBoxText("");
   };
 
   return (
-    <div id="main">
-      <input
-        type="text"
-        id="task"
-        value={value}
-        required
-        onChange={(event) => {
-          setValue(event.target.value);
-        }}
-      />
-      <button id="btn" onClick={handleCLick}>
-        {" "}
-        click
-      </button>
-      <Task
-        tasks={task}
-        handleDelete={handleDelete}
-        handleEdit={handleEdit}
-        open={open}
-      />
-      {open ? (
-        <div>
-          <textarea
-            value={value1}
-            onChange={(ev) => {
-              setValue1(ev.target.value);
-            }}
-          />
-          <button
-            onClick={(id) => {
-              SaveEdit(id);
-            }}
-          >
-            Save
-          </button>
-        </div>
-      ) : null}
-    </div>
+    <>
+      <div id="main">
+        <textarea id="task" value={items} onChange={handleChange} />
+        <button disabled={!items} onClick={handleAdd}>
+          Add
+        </button>
+        <hr />
+        {todoList.length === 0 ? (
+          "No Task"
+        ) : (
+          <ul>
+            {todoList.map((task, id) => {
+              return (
+                <li key={id} className="list">
+                  {task.text}
+                  <button onClick={() => handleEdit(id)}>Edit</button>
+                  <button onClick={() => handleDelete(id)}>Delete</button>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+        {showEditBox ? (
+          <div>
+            <textarea value={editBoxText} onChange={handleEditBox} />
+            <button disabled={!editBoxText} onClick={() => saveEdit()}>
+              Save
+            </button>
+          </div>
+        ) : null}
+      </div>
+    </>
   );
 }
 
