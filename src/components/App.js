@@ -54,7 +54,7 @@ function App() {
         {todoList.length === 0 ? (
           "No Task"
         ) : (
-          <ul>
+          <>
             {todoList.map((task, id) => {
               return (
                 <li key={id} className="list">
@@ -68,7 +68,7 @@ function App() {
                 </li>
               );
             })}
-          </ul>
+          </>
         )}
         {showEditBox ? (
           <div>
