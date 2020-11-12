@@ -47,7 +47,7 @@ function App() {
     <>
       <div id="main">
         <textarea id="task" value={items} onChange={handleChange} />
-        <button disabled={!items} onClick={handleAdd}>
+        <button id="btn" disabled={!items} onClick={handleAdd}>
           Add
         </button>
         <hr />
@@ -59,8 +59,12 @@ function App() {
               return (
                 <li key={id} className="list">
                   {task.text}
-                  <button onClick={() => handleEdit(id)}>Edit</button>
-                  <button onClick={() => handleDelete(id)}>Delete</button>
+                  <button className="edit" onClick={() => handleEdit(id)}>
+                    Edit
+                  </button>
+                  <button className="delete" onClick={() => handleDelete(id)}>
+                    Delete
+                  </button>
                 </li>
               );
             })}
@@ -68,8 +72,16 @@ function App() {
         )}
         {showEditBox ? (
           <div>
-            <textarea value={editBoxText} onChange={handleEditBox} />
-            <button disabled={!editBoxText} onClick={() => saveEdit()}>
+            <textarea
+              className="editTask"
+              value={editBoxText}
+              onChange={handleEditBox}
+            />
+            <button
+              className="saveTask"
+              disabled={!editBoxText}
+              onClick={() => saveEdit()}
+            >
               Save
             </button>
           </div>
