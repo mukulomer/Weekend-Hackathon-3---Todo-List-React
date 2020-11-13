@@ -57,15 +57,17 @@ function App() {
           <>
             {todoList.map((task, id) => {
               return (
-                <li key={id} className="list">
-                  {task.text}
+                <div>
+                  <li key={id} className="list">
+                    {task.text}
+                  </li>
                   <button className="edit" onClick={() => handleEdit(id)}>
                     Edit
                   </button>
                   <button className="delete" onClick={() => handleDelete(id)}>
                     Delete
                   </button>
-                </li>
+                </div>
               );
             })}
           </>
