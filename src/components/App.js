@@ -58,7 +58,7 @@ function App() {
             {todoList.map((task, id) => {
               return (
                 <li key={id} className="list">
-                  <input type="text" id="task" value={task.text} disabled />
+                  {task.text}
                   <button className="edit" onClick={() => handleEdit(id)}>
                     Edit
                   </button>
